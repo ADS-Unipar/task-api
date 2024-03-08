@@ -1,38 +1,29 @@
 const express = require('express');
+const db = require('./db');
+const tasks = require('./models/tasks');
 const app = express();
 const port = 3000;
 app.use(express.json());
 // Rota padrão
-app.get('/', (req, res) => {
-    res.send('Bem-vindo ao Express.js!');
-});
 
-app.get('/cores/:cor', (req, res) => {
-    const cores= ['azul','amarelo', 'vermelho', 'roxo', 'verde'];
-    if(cores.includes(req.params.cor)){
-        res.send(`cor ${req.params.cor}`);
-        return;
+db.sync()
+app.get('/tasks', async (req, res) => {
+    try {
+        const task = await tasks.findAll();
+        res.send({...task})
+    } catch (error) {
+        res.status(500).send(error)
     }
-
-    res.status(400).send( `${req.params.cor} não é uma cor válida!`)
-    
-});
-app.get('/cores', (req, res) => {
-    const cores= ['azul','amarelo', 'vermelho', 'roxo', 'verde'];
-   res.json(cores)
-    
 });
 
-app.post('/cor', (req, res) => {
-    const cores= ['azul','amarelo', 'vermelho', 'roxo', 'verde'];
-    if(cores.includes(req.body.cor)){
-        res.json({cor: req.body.cor});
-        return;
+app.post('/tasks', async (req, res) => {
+    try {
+        const task = await tasks.create({...req.body})
+        res.send({...task})
+    } catch (error) {
+        res.status(500).send(error)
     }
-    res.status(400)
-    .json( {error:`${req.body.cor} não é uma cor válida!`})
 });
-
 
 // Iniciar o servidor
 app.listen(port, () => {
