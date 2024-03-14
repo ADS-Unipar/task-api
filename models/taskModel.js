@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const db = require('../db');
+const db = require('../infrastructure/db');
 
 module.exports = db.define('task', {
     title: {
@@ -9,6 +9,7 @@ module.exports = db.define('task', {
     status: {
         type: DataTypes.ENUM,
         values: ['COMPLETED','ACTIVE'],
-        allowNull:false
+        allowNull:false,
+        defaultValue: 'ACTIVE'
     }
 });
