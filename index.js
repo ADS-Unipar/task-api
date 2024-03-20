@@ -3,7 +3,7 @@ const db = require('./infrastructure/db');
 const bodyParser = require('body-parser')
 const taskRoute = require('./routes/taskRoutes');
 const app = express();
-const port = 3000;
+const port = 8000;
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }))
 // Rota padrão
